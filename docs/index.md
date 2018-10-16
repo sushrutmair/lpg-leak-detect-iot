@@ -49,3 +49,8 @@ A video of the above setup:
 <video src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/lpg_detect_bb_proto.mp4" poster="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/video_preload.jpg" width="450" height="300" controls preload></video>
 </p>
 
+The Node MCU is connected to an 802.11 router and is also hosting a simple HTTP based web server inside it. The code is explained later in this article. The Wi-Fi network that the Detector connects to is also connected to by a laptop. In this case, my laptop is running Win 10 and a Debian Linux Win 10 app is running on top of it. There is a python script running under Debian which periodically requests the LPG level from the Detector, over HTTP. The script is explained later in this article itself.
+
+### Detector Code:
+
+This code runs in the Node MCU. Full source is available [here](https://github.com/sushrutmair/lpg-leak-detect-iot/blob/master/lpg-leak-detect.ino). The code logic is as follows:
