@@ -42,11 +42,3 @@ The MQ6 cable ingress is indicated. In addition there is a voltage divider to al
 <p align="center">
   <img width="450" height="300" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/bb_system.jpg">
 </p>
-
-A video of the above setup:
-
-<p align="center">
-<video src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/lpg_detect_bb_proto.mp4" poster="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/video_preload.jpg" width="450" height="300" controls preload></video>
-</p>
-
-
