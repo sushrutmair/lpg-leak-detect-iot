@@ -61,11 +61,15 @@ This code runs in the Node MCU. Full source is available [here](https://github.c
 </p>
 
 - Setup pin modes: Here we set the required pins as OUTPUT and also HIGH as needed. We also initialize Serial communications to be able to debug during development via a serial port.
+-	Set as WiFi STA and connect to WiFi: Node MCU will run in 802.11 station mode and connect to the specified router network.
+-	Register MDNS name: MDNS (Mobile DNS) allows us to name IoT devices and refer to them by that name always (as against remembering cumbersome IP addresses).
+-	Register callbacks: Since the Node MCU is running as a web server, we need to register callbacks to handle incoming clients. That is done here and also we finally start the web server service.
+-	Loop: All of the above is setup code that runs once after power up. The loop logic simply calls for handling clients. The NodeMCU framework takes care of handling the linking of each client HTTP request to the afore-registered callback handlers.
 
-```
-  pinMode(D1, OUTPUT);//PWR indicator
-  pinMode(D2, OUTPUT);// Comms indicator
-  pinMode(D9, OUTPUT);//LPG critical level indicator
-  digitalWrite(D1, HIGH);
-  digitalWrite(D9, LOW);
-```
+### Python Client Script Code"
+
+The client is pretty simple and written in python. The full source is [here](https://github.com/sushrutmair/lpg-leak-detect-iot/blob/master/lpgmon_client.py). The code logic is as follows:
+
+<p align="center">
+  <img width="650" height="250" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/python_flow.jpg">
+</p>
