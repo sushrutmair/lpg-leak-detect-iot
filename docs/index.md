@@ -66,10 +66,62 @@ This code runs in the Node MCU. Full source is available [here](https://github.c
 -	Register callbacks: Since the Node MCU is running as a web server, we need to register callbacks to handle incoming clients. That is done here and also we finally start the web server service.
 -	Loop: All of the above is setup code that runs once after power up. The loop logic simply calls for handling clients. The NodeMCU framework takes care of handling the linking of each client HTTP request to the afore-registered callback handlers.
 
-### Python Client Script Code"
+### Python Client Script Code:
 
 The client is pretty simple and written in python. The full source is [here](https://github.com/sushrutmair/lpg-leak-detect-iot/blob/master/lpgmon_client.py). The code logic is as follows:
 
 <p align="center">
   <img width="650" height="250" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/python_flow.jpg">
 </p>
+
+-	Set freq and period: Set the HTTP request frequency (interval to request LPG level over HTTP from the Detector) and the period (total time to continue requesting for).
+-	Set CSV file path: Path to save the CSV file in. We can use this file to generate graphs and run analysis.
+-	Calculate iterations: calculate how many iterations the code shall loop for
+-	“For # …” and “Print each LPG…” this where we use the Requests library to query the Detector for the LPG level and also write it to disk.
+
+### Results:
+
+Before we go into the results, here are some more pictures of my setup. The first one below shows the Detector system partly packaged into a cardboard box. The black part at the bottom of the image (below the LEDs) where many wires are routed is a header acting as a common ground plane:
+
+<p align="center">
+  <img width="450" height="300" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/overall_bb.jpg">
+</p>
+
+Here is a close-up of the MQ6 assembly itself. I have placed the MQ6 into a thick PVC pipe and topped it with a plastic cap having perforations. This is essentially to protect the MQ6.
+
+<p align="center">
+  <img width="450" height="300" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/mq6_assembly.jpg">
+</p>
+
+Finally, a picture of the Detector box closed up. The green and white cables are the 10 ft cables going to the MQ6 assembly above.
+
+<p align="center">
+  <img width="450" height="300" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/det_box.jpg">
+</p>
+
+The output was pretty good and relatable across readings and sessions. Here are the graphs of runs of a few hours. The raw CSV’s are available [here](https://github.com/sushrutmair/lpg-leak-detect-iot/tree/master/docs/assets/csv).
+
+
+<p align="center">
+  <img width="850" height="350" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/g1.jpg">
+</p>
+
+<p align="center">
+  <img width="850" height="350" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/g2.jpg">
+</p>
+
+The large values (circled red) at the very start seen on the graph are the heater stabilizing. It takes a few minutes to do that and provide stable values. After that happens, the system is ready to detect.
+Below is a graph where leak detection was made. It is quite evident from the graph itself.
+
+<p align="center">
+  <img width="850" height="350" src="https://raw.githubusercontent.com/sushrutmair/lpg-leak-detect-iot/master/docs/assets/g3.jpg">
+</p>
+
+Key Learning:
+-	Current draw of your sensor is important, nay critical. You must find their peak values and nominal values. Taking this alongwith the projected current draw of the rest of your circuit helps you design the right power supply. Failure to do this will mean non-working / glitchy readings at best and a blown component / microcontroller at worst.
+-	DC voltage drops as the length of your wire increases. How much it drops is usually a function of the wire gauge and length and other factors. You would be well advised to theoretically calculate this before hand to avoid nasty bugs later. In my case here, I did do the calculation and it predicted minimal drop so I did not do anything special to counter it. Empirically, I measure that a +4.86V into the MQ6 at the Detector end resulted in a +4.81V at the MQ6 end.
+-	MQ6 is also sensitive to alcohol and cooking smoke and this affects readings. Always minimize their occurrence near the sensor.
+-	Common ground planes are obviously critical, especially when you have more than a few components in your circuit. For prototyping projects like these, I’ve found that shorting all pins of a standard header and then routing all your grounds to it is a good way to neatly manage a common ground plane.
+-	MDNS did not work. I think that Windows 10 has issues supporting it but surprisingly, Chrome browser on Win 10 was able to use the named device instead of the IP (Firefox couldn’t). MDNS also doesn’t work from Android OS. MDNS is extremely useful and I think a must in IoT projects. I know I can rig my own DNS server but I don’t want that hassle when MDNS is already available. I haven’t done much digging into MDNS support across platforms but it is a topic for future research.
+-	Cable ties are a godsend for wire management!
+
